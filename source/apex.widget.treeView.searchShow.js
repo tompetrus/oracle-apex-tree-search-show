@@ -43,7 +43,7 @@
       //if a matchClass has been specified, remove previously found nodes and tag new results
       if ( self.options.matchClass ) {
         $("."+self.options.matchClass, self.element).removeClass(self.options.matchClass);
-        sel.find("span.a-TreeView-label").addClass(self.options.matchClass);
+        sel.find(".a-TreeView-label").addClass(self.options.matchClass);
       };
       
       //get the datanodes for each found treenode

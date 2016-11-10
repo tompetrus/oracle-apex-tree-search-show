@@ -3,7 +3,7 @@
 Plugin Details:
 - Name: Tree Search and Show
 - Code: TP.DA.TREESEARCHSHOW
-- Version: v1.0
+- Version: v1.0.1
 - Apex compatibility: 5
 
 In Apex 5 a new tree widget has been introduced which replaces the previous implementation of jstree. This means that all code which was used to interact with the jstree implementation is no longer valid. However, much of the functionality is perfectly reproducable with the new widget.  
