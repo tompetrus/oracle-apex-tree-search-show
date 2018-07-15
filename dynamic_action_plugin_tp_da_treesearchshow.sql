@@ -75,8 +75,9 @@ wwv_flow_api.create_plugin(
 '   WHERE region_id = l_region_id;',
 '  ',
 '  l_onload_code := ''apex.jQuery("#''||l_static_id||'' div[role=tree]").treeView("option", {''',
-'    || apex_javascript.add_attribute(''matchFunction'', l_search_func)',
-'    || apex_javascript.add_attribute(''matchClass'', l_match_class, false, false)',
+'    || case when l_search_func is not null then ''"matchFunction":''||l_search_func end',
+'    || case when l_search_func is not null and l_match_class is not null then '','' end',
+'    || case when l_match_class is not null then ''"matchClass":"''||l_match_class||''"'' end',
 '    ||''})'';',
 '',
 '  apex_javascript.add_onload_code (l_onload_code);',
@@ -97,7 +98,7 @@ wwv_flow_api.create_plugin(
 ,p_substitute_attributes=>true
 ,p_subscribe_plugin_settings=>true
 ,p_help_text=>'Readme, Questions, Issues : go to the github link!'
-,p_version_identifier=>'1.0.1'
+,p_version_identifier=>'1.0.2'
 ,p_about_url=>'https://github.com/tompetrus/oracle-apex-tree-search-show'
 ,p_plugin_comment=>'The prefix for files and classes, etc is "tss", which is short for "tree search show". Only the javascript is not put in a plugin namespace nor prefixed with tss because it''s purpose is broader than this plugin.'
 ,p_files_version=>13

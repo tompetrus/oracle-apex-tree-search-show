@@ -37,8 +37,9 @@ BEGIN
    WHERE region_id = l_region_id;
   
   l_onload_code := 'apex.jQuery("#'||l_static_id||' div[role=tree]").treeView("option", {'
-    || apex_javascript.add_attribute('matchFunction', l_search_func)
-    || apex_javascript.add_attribute('matchClass', l_match_class, false, false)
+    || case when l_search_func is not null then '"matchFunction":'||l_search_func end
+    || case when l_search_func is not null and l_match_class is not null then ',' end
+    || case when l_match_class is not null then '"matchClass":"'||l_match_class||'"' end
     ||'})';
 
   apex_javascript.add_onload_code (l_onload_code);
