@@ -35,21 +35,24 @@ BEGIN
     INTO l_static_id
     FROM apex_application_page_regions
    WHERE region_id = l_region_id;
-  
-  l_onload_code := 'apex.jQuery("#'||l_static_id||' div[role=tree]").treeView("option", {'
-    || case when l_search_func is not null then '"matchFunction":'||l_search_func end
-    || case when l_search_func is not null and l_match_class is not null then ',' end
-    || case when l_match_class is not null then '"matchClass":"'||l_match_class||'"' end
-    ||'})';
-
-  apex_javascript.add_onload_code (l_onload_code);
    
   IF l_color_text IS NOT NULL OR l_color_back IS NOT NULL THEN
-    apex_css.add('#'||l_static_id||' .a-TreeView-node .'||l_match_class||' {color: '||COALESCE(l_color_text,'inherit')||';  background-color: '||COALESCE(l_color_back,'inherit')||';}');
+    apex_css.add('#'||l_static_id||' .a-TreeView-node .search-da-'||p_dynamic_action.id||' {color: '||COALESCE(l_color_text,'inherit')||';  background-color: '||COALESCE(l_color_back,'inherit')||';}');
   END IF;
    
   l_code := 
-    'function(){ apex.jQuery("div[role=tree]", this.affectedElements).treeView("findAndShow", apex.item("'||l_search_item||'").getValue()); }';
+       'function(){ ' || l_crlf
+    || '  var tree = apex.jQuery("div[role=tree]", this.affectedElements);' || l_crlf
+    || '  tree.treeView("findAndShow", apex.item("'||l_search_item||'").getValue(),' || l_crlf
+    || '{'
+    ||      '"daID":'||p_dynamic_action.id
+    ||      case when l_search_func is not null or l_match_class is not null then ',' end
+    ||      case when l_search_func is not null then '"matchFunction":'||l_search_func end
+    ||      case when l_search_func is not null and l_match_class is not null then ',' end
+    ||      case when l_match_class is not null then '"matchClass":"'||l_match_class||'"' end
+    ||'   })' || l_crlf
+    || '); ' || l_crlf
+    ||'}';
    
   l_result.javascript_function := l_code;
   

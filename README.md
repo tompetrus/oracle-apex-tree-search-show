@@ -3,7 +3,7 @@
 Plugin Details:
 - Name: Tree Search and Show
 - Code: TP.DA.TREESEARCHSHOW
-- Version: v1.0.1
+- Version: v1.0.3
 - Apex compatibility: 5
 
 In Apex 5 a new tree widget has been introduced which replaces the previous implementation of jstree. This means that all code which was used to interact with the jstree implementation is no longer valid. However, much of the functionality is perfectly reproducable with the new widget.  
@@ -28,3 +28,10 @@ Demo: https://apex.oracle.com/pls/apex/f?p=90922:11
 3. As a true action, select the "Tree Search and Show" action, found under "Execute"
 4. Adjust the settings
 5. Select the affected region (the tree region)
+
+## Versions
+
+v1.0.0 - release
+v1.0.1 - fixed search not working with links in nodes (Issue #1)
+v1.0.2 - fixed custom search function not working (Issue #2)
+v1.0.3 - changed some of the workings to better support multiple search actions with different configurations

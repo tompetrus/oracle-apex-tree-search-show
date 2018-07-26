@@ -14,11 +14,19 @@
       matchFunction: function(n,term){ return n.label.toLowerCase().indexOf(term.toLowerCase())!==-1;}
     , matchClass : "tss-search-match"
     }
-    , 
+    , _create: function () {
+      this._lastSearchOptions = {matchFunction: null, matchClass: null, daID: null};
+      this._super();
+    }
+    ,
     /**
      * This function will perform a search on the new apex 5 tree widget, assign a class to the element(s), and will open up their parent branches so the results are all visible to the user.
      * The tree widget's standard "find" functionality will look through the datanodes and then return the matching set of dom elements, so it takes extra work on the developer's part to actually present this found set, which this snippet tries to alleviate.
      * @param pTerm {String} The term to search the tree's nodes with
+     * @param pOptions {Object} Options object to perform the search with
+     * @param pOptions.matchFunction {Function} @see widget options.matchFunction - but will not save the setting on the widget. Good for one-off use
+     * @param pOptions.matchClass {String} @see widget options.matchClass - but will not save the setting on the widget. Good for one-off use
+     * @param pOptions.daID {Number} an apex Dynamic Action ID, usually passed along through a plugin. It's used to distinguish between different search actions, and where search css classes may be identical. Leave blank if unsure.
      * @example 
      * With CSS:
      * .matchClass {
@@ -34,16 +42,29 @@
      *
      * This will search for all nodes where ab appears and color them in red and purple, and opens up their parent nodes
      */
-    findAndShow: function ( pTerm ) {
+    findAndShow: function ( pTerm, pOptions ) {
       var self = this;
       
+      var lDefaultOptions = {
+        matchFunction : self.options.matchFunction
+      , matchClass : self.options.matchClass
+      , daID : null
+      }
+      var lOptions = $.extend({}, pOptions, lDefaultOptions);
+      
       //perform the search operation on the tree
-      var sel = self.find({depth: -1, match: function(n){ return self.options.matchFunction(n, pTerm); }, findAll: true});
+      var sel = self.find({depth: -1, match: function(n){ return lOptions.matchFunction(n, pTerm); }, findAll: true});
       
       //if a matchClass has been specified, remove previously found nodes and tag new results
-      if ( self.options.matchClass ) {
-        $("."+self.options.matchClass, self.element).removeClass(self.options.matchClass);
-        sel.find(".a-TreeView-label").addClass(self.options.matchClass);
+      if ( lOptions.matchClass ) {
+        if ( !!self._lastSearchOptions.matchClass ) {
+          var matchClasses = self._lastSearchOptions.matchClass;
+          if ( !!self._lastSearchOptions.daID ) {
+            matchClasses += "search-da-" + self._lastSearchOptions.daID;
+          }
+          $("."+self._lastSearchOptions.matchClass, self.element).removeClass(matchClasses);
+        }
+        sel.find(".a-TreeView-label").addClass(lOptions.matchClass + " search-da-"+lOptions.daID);
       };
       
       //get the datanodes for each found treenode
@@ -67,6 +88,8 @@
           self.expand(ex);
         });
       })
+      
+      self._lastSearchOptions = lOptions;
     }
   })
 } ) ( apex.jQuery )
