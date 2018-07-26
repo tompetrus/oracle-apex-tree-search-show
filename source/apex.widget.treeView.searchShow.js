@@ -26,7 +26,7 @@
      * @param pOptions {Object} Options object to perform the search with
      * @param pOptions.matchFunction {Function} @see widget options.matchFunction - but will not save the setting on the widget. Good for one-off use
      * @param pOptions.matchClass {String} @see widget options.matchClass - but will not save the setting on the widget. Good for one-off use
-     * @param pOptions.daID {Number} an apex Dynamic Action ID, usually passed along through a plugin. It's used to distinguish between different search actions, and where search css classes may be identical. Leave blank if unsure.
+     * @param pOptions.daID {String} an apex Dynamic Action ID, usually passed along through a plugin. It's used to distinguish between different search actions, and where search css classes may be identical. Leave blank if unsure.
      * @example 
      * With CSS:
      * .matchClass {
@@ -50,7 +50,7 @@
       , matchClass : self.options.matchClass
       , daID : null
       }
-      var lOptions = $.extend({}, pOptions, lDefaultOptions);
+      var lOptions = $.extend({}, lDefaultOptions, pOptions);
       
       //perform the search operation on the tree
       var sel = self.find({depth: -1, match: function(n){ return lOptions.matchFunction(n, pTerm); }, findAll: true});
@@ -60,7 +60,7 @@
         if ( !!self._lastSearchOptions.matchClass ) {
           var matchClasses = self._lastSearchOptions.matchClass;
           if ( !!self._lastSearchOptions.daID ) {
-            matchClasses += "search-da-" + self._lastSearchOptions.daID;
+            matchClasses += " search-da-" + self._lastSearchOptions.daID;
           }
           $("."+self._lastSearchOptions.matchClass, self.element).removeClass(matchClasses);
         }

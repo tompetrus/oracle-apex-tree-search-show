@@ -43,15 +43,16 @@ BEGIN
   l_code := 
        'function(){ ' || l_crlf
     || '  var tree = apex.jQuery("div[role=tree]", this.affectedElements);' || l_crlf
-    || '  tree.treeView("findAndShow", apex.item("'||l_search_item||'").getValue(),' || l_crlf
-    || '{'
-    ||      '"daID":'||p_dynamic_action.id
+    || '  tree.treeView("findAndShow",' || l_crlf
+    || '    apex.item("'||l_search_item||'").getValue(),' || l_crlf
+    || '    {'
+    ||      '"daID":"'||p_dynamic_action.id||'"'
     ||      case when l_search_func is not null or l_match_class is not null then ',' end
     ||      case when l_search_func is not null then '"matchFunction":'||l_search_func end
     ||      case when l_search_func is not null and l_match_class is not null then ',' end
     ||      case when l_match_class is not null then '"matchClass":"'||l_match_class||'"' end
-    ||'   })' || l_crlf
-    || '); ' || l_crlf
+    ||'}' || l_crlf
+    || '  ); ' || l_crlf
     ||'}';
    
   l_result.javascript_function := l_code;
